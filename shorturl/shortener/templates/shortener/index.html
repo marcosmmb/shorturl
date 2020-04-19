@@ -1,0 +1,37 @@
+{% extends "shortener/base.html" %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+    <div class="content-section">
+        <form method="POST">
+            {% csrf_token %}
+            {{ form|crispy }}
+            <div class="form-group">
+                <button class="btn btn-outline-info" type="submit">
+                    Shorten
+                </button>
+            </div>
+        </form>
+    </div>
+    <div class="content-section">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Short URL</th>
+                    <th>Visits</th>
+                    <th>Original URL</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for link in links reversed %}
+                    <tr>
+                        <td><a href="{{ request.build_absolute_uri }}{{ link.slug }}">{{ request.build_absolute_uri }}{{ link.slug }}</a></td>
+                        <td>{{ link.counter }}</td>
+                        <td><a href="{{ link.original_url }}">{{ link.original_url }}</a></td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
